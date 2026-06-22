@@ -1,24 +1,24 @@
 listing_id,category,confidence,reasoning,requires_human_review
-HK-F001,None,Medium,"Former Co-op convenience store, vacant since operator relocated; retains food-retail fixtures but no current operator (historical use, not current).",TRUE
-89924760.0,None,High,"Woodland/land plot at auction; no nursery, SEN, or food-store relevance.",FALSE
+HK-F001,Food Store,Medium,"Former Co-op convenience store with retained food-retail fixtures (chillers, shelving); vacant but Harkalm explicitly acquires former food-retail buildings for conversion.",TRUE
+89924760.0,None,High,"Woodland/land plot at auction; countryside setting with no realistic development potential for nursery, SEN school, or food store.",FALSE
 72439054,None,High,Fully-let high-street retail investment with dance studio on upper floor; no target-sector signal.,FALSE
-73310018,None,High,"Former cafe with residential above, redevelopment potential; no current nursery/SEN/food-store use.",FALSE
-72075420,None,Medium,"Former doctor's surgery; 'suitable for' healthcare/office/community uses is suitability language, not current operation.",TRUE
+73310018,None,High,"Former café with residential above; small mixed-use building with no nursery, SEN, or food-store relevance.",FALSE
+72075420,None,Medium,"Former doctor's surgery; suitability language around healthcare/office/community uses with no specific nursery or food-store signal.",TRUE
 73430519,None,High,Ground-floor sunbed/tanning shop with flat above; no target-sector relevance.,FALSE
-70917694,None,High,"Retail shop/workshop selling bath products plus holiday apartment; not food, nursery, or SEN use.",FALSE
-143478371.0,None,High,"Pub for sale; mention of nearby primary/secondary school is a location amenity, not the property's use.",FALSE
+70917694,None,High,"Retail shop/workshop selling bath products plus holiday apartment; not food, nursery, or SEN relevant.",FALSE
+143478371.0,None,High,"Grade II Listed 16th-century village pub; heritage listing and rural village setting make food-store conversion unrealistic despite pub being an Harkalm-listed building type.",FALSE
 73361618,None,High,Multi-let industrial/trade park investment; no target-sector relevance.,FALSE
 69044895,None,High,Fire-door manufacturing and joinery business in industrial premises; no target-sector relevance.,FALSE
-758742929390929.0,None,High,"Freehold with flats, retail shop, and garage workshop; no specific tenant business named, no target-sector signal.",FALSE
-758775441528961.0,None,Medium,"Marketed at healthcare/medical professionals, but current tenants are a gym, animal supplies shop, and grooming parlour; not a target sector.",TRUE
+758742929390929.0,None,High,"Freehold with flats, retail shop, and garage workshop; no target-sector signal.",FALSE
+758775441528961.0,None,Medium,"Marketed at healthcare/medical professionals, but current tenants are a gym, animal supplies shop, and grooming parlour; no target-sector relevance.",TRUE
 HK-F002,SEN School,High,"Currently operated by an independent SEN provider under F1 consent, capacity for 80 pupils aged 7-18, sensory/therapy suite in active use.",FALSE
 HK-F004,None,High,"Mixed-use investment let to a vape retailer and hairdresser; listing explicitly states no consent for childcare, education, or food-retail use.",FALSE
-67195138,None,Medium,"Car showroom and residence; 'suitable for multitude of uses' is suitability language, current use is a showroom.",TRUE
+67195138,None,Medium,"Car showroom and residence; 'suitable for multitude of uses' is generic suitability language with no specific food-store signal in the listing text.",TRUE
 758763053880849.0,Nursery,High,"Currently trading children's day nursery, registered for 75 children aged 0-5, Good Ofsted rating, operating since 2019.",FALSE
-88930830.0,None,Medium,"Offered with vacant possession; building is configured for nursery use but has no current operator (former use, not current).",TRUE
-758756684610048.0,None,Medium,"Ground-floor unit currently let to Sainsbury's, but the asset being marketed is airspace/roof-extension development rights for apartments, not a food-store acquisition.",TRUE
+88930830.0,Nursery,Medium,"Vacant nursery building offered with vacant possession; configured and consented for nursery use — Harkalm explicitly acquires vacant properties for conversion.",TRUE
+758756684610048.0,None,Medium,"Ground-floor unit let to Sainsbury's, but the asset being marketed is airspace/roof-extension development rights for apartments; classifying what is being sold, not the underlying tenant.",TRUE
 89922468.0,None,High,"Industrial/warehouse complex for manufacturing, storage, and distribution; no target-sector relevance.",FALSE
-88931949.0,None,Medium,"Offered with vacant possession; building retains nursery-specific fit-out but has no current operator (former use, not current).",TRUE
-73143559,Food Store,High,Retail unit currently used as a small convenience store; direct statement of current food-retail use.,FALSE
-HK-F003,None,Medium,"Explicitly 'most recently trading as a nursery before the operator's lease expired'; vacant, D1 consent retained, but no current operator (former use, not current).",TRUE
-89908812.0,None,Medium,"Former Costcutter supermarket, vacant, explicitly noted as suitable for a variety of alternative uses; historical use, not current.",TRUE
+88931949.0,Nursery,Medium,"Offered with vacant possession; building retains nursery-specific fit-out — Harkalm explicitly acquires vacant properties for conversion.",TRUE
+73143559,Food Store,High,Retail unit currently operating as a small convenience store; direct current food-retail use.,FALSE
+HK-F003,Nursery,Medium,"Most recently trading as a nursery, D1 consent retained; Harkalm explicitly acquires former educational buildings for conversion.",TRUE
+89908812.0,Food Store,Medium,"Former Costcutter supermarket, vacant; Harkalm explicitly acquires former food-retail buildings for conversion.",TRUE

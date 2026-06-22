@@ -49,17 +49,21 @@ py -m pytest tests/ -v
 
 ## Prompt Design
 
-The core rule is **current use only**. The model is explicitly instructed to ignore former use, potential use, and suitability language — these are the main sources of noise in agent copy.
+The core rule is **sector relevance**, not current use. Harkalm acquires both operating and vacant/former properties for conversion, so a vacant former nursery or former food store is acquisition-relevant and classified accordingly.
 
-**Modelling choice:** I interpreted the four labels as *current operational use*. This deliberately avoids classifying properties based only on historic use or agent suitability language, which are the main sources of noise in agent copy. The trade-off is that a vacant former nursery with retained fit-out is classified `None`, not `Nursery` — acquisitions-relevant signal is preserved via `Medium` confidence and `requires_human_review = True` rather than the category label. In a production workflow I would likely add a separate `candidate_sector` field so vacant/former assets surface in sector-specific views without conflating them with currently operating properties.
+**Modelling choice:** I classified by sector relevance rather than current operational use. A vacant former nursery with retained fit-out is `Nursery`, not `None`. A former Costcutter with no current tenant is `Food Store`. The signal that matters is whether the property has a meaningful connection to one of the three sectors — not whether someone is trading there today. Generic suitability language alone (`"suitable for a variety of uses"`) does not qualify; a specific former use does.
 
 Rules applied in order:
-1. Vacancy signals (`"former"`, `"previously"`, `"vacant possession"`, `"lease expired"`) → `None`
-2. Suitability language (`"suitable for"`, `"ideal for"`, `"marketed at professionals"`) → `None` unless a named current tenant in the target sector is also stated
-3. Points of interest (nearby schools, stations) describe location — ignored entirely
-4. Airspace or development rights → classify what is being sold, not the underlying tenant
+1. Classify by sector relevance — former or vacant use in a target sector qualifies
+2. Generic suitability language alone (no named sector) → `None`
+3. A specific former sector use → classified in that sector even if now vacant
+4. Points of interest (nearby schools, stations) describe location — ignored entirely
+5. Airspace or development rights → classify what is being sold, not the underlying tenant
+6. Heritage-listed buildings where conversion is clearly impractical → `None`
 
-Confidence is calibrated to reflect whether the acquisitions team should take a second look, not just how certain the category call is. A clearly vacant former nursery is `None` with `Medium` confidence — the category is unambiguous, but the property warrants human review. A woodland plot is `None` with `High` confidence — no connection to any target sector.
+Confidence is calibrated to reflect whether the acquisitions team should take a second look:
+- `High`: property either currently operates in a target sector with an explicit operator named, or has no connection to any target sector and no suitability/alternative-use language
+- `Medium`: any one of — former/vacant use in a target sector, retained fit-out or planning consent, suitability language, or airspace above a target-sector tenant
 
 ---
 
@@ -67,10 +71,12 @@ Confidence is calibrated to reflect whether the acquisitions team should take a 
 
 Several listings are genuinely tricky:
 
-- **HK-F001** (former Co-op): Vacant, retains chiller cabinets and shelving. Classified `None` because the current operator has left. Medium confidence because the fit-out makes it sector-relevant.
-- **88930830 / 88931949** (vacant nurseries): Buildings configured for nursery use, offered with vacant possession. Both `None` / `Medium` — fit-out retained but no current operator.
-- **758756684610048** (Sainsbury's airspace): Ground floor is a Sainsbury's, but the asset being sold is roof-extension development rights. Classified by what is being sold: `None`.
-- **758775441528961** (healthcare unit): Marked as `HEALTHCARE_FACILITY`, marketed at medical professionals — but current tenants are a gym, an animal supplies shop, and a grooming parlour. `None` / `Medium`.
+- **HK-F001** (former Co-op): Vacant, retains chiller cabinets and shelving. `Food Store` / `Medium` — specific former food-retail use with retained fit-out qualifies under sector relevance.
+- **88930830 / 88931949** (vacant nurseries): Buildings configured for nursery use, offered with vacant possession. Both `Nursery` / `Medium` — no current operator, but former nursery use with retained fit-out is acquisition-relevant.
+- **HK-F003** (former nursery): Most recently trading as a nursery, D1 consent retained. `Nursery` / `Medium`.
+- **89908812** (former Costcutter): Vacant former supermarket. `Food Store` / `Medium`.
+- **758756684610048** (Sainsbury's airspace): Ground floor is a Sainsbury's, but the asset being sold is roof-extension development rights. Classified by what is being sold: `None` / `Medium`.
+- **758775441528961** (healthcare unit): Marketed at medical professionals — but current tenants are a gym, an animal supplies shop, and a grooming parlour. `None` / `Medium`.
 - **HK-F004**: Listing explicitly states no consent for childcare, education, or food retail — unusually clear, `None` / `High`.
 
 ---
@@ -81,7 +87,7 @@ The initial prompt returned `High` on all 23 rows — correct on categories but 
 
 The fix: Medium fires on **any** connection to a target sector — former use, retained fit-out, planning consent, suitability language, or marketed-at language — regardless of how confident the None call is. Two listings remain false Mediums (a woodland plot and a former café flagged due to generic "suitable for" developer language). These were accepted as the safer failure mode: over-flagging for human review is preferable to under-flagging.
 
-Final result: **23/23 matched my manual baseline on category, 21/23 on confidence**.
+Final result: **23/23 matched my manual baseline on category, 19/23 on confidence** (4 false Mediums on clearly-None properties — accepted as the safer failure mode).
 
 ---
 

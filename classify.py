@@ -44,7 +44,6 @@ def classify(client: OpenAI, listing_id: str, listing_text: str) -> Classificati
                     {"role": "user", "content": f"Classify this listing:\n\n{listing_text}"},
                 ],
                 response_format=LLMResponse,
-                temperature=0,
             )
             parsed = response.choices[0].message.parsed
             if parsed is not None:

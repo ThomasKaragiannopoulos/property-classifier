@@ -19,6 +19,8 @@ py evaluate.py
 ```
 Output: `results/predictions.csv` and `results/predictions.xlsx`
 
+`results/predictions.csv` is the **submission output** — it contains the full original listing data alongside `classified_category`, `confidence`, and `reasoning` for each row.
+
 **Classify unseen listings** (any CSV in the same column format):
 ```bash
 py predict.py path/to/listings.csv
@@ -79,7 +81,7 @@ The initial prompt returned `High` on all 23 rows — correct on categories but 
 
 The fix: Medium fires on **any** connection to a target sector — former use, retained fit-out, planning consent, suitability language, or marketed-at language — regardless of how confident the None call is. Two listings remain false Mediums (a woodland plot and a former café flagged due to generic "suitable for" developer language). These were accepted as the safer failure mode: over-flagging for human review is preferable to under-flagging.
 
-Final result: **23/23 categories correct, 21/23 confidence correct**.
+Final result: **23/23 matched my manual baseline on category, 21/23 on confidence**.
 
 ---
 

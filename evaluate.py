@@ -10,7 +10,6 @@ from openpyxl.styles import PatternFill
 
 from classify import classify
 from ingest import extract_text, get_listing_id, load_listings
-from schema import requires_human_review
 
 load_dotenv()
 
@@ -49,12 +48,11 @@ def write_xlsx(pairs: list, baseline: dict, path: Path) -> None:
     ws = wb.active
     ws.append([
         "listing_id", "category", "confidence",
-        "reasoning", "manual_categorisation", "requires_human_review",
+        "reasoning", "manual_categorisation",
     ])
 
     for _, result in pairs:
         b = baseline.get(result.listing_id, {})
-        req = requires_human_review(result.confidence)
 
         ws.append([
             result.listing_id,
@@ -62,7 +60,6 @@ def write_xlsx(pairs: list, baseline: dict, path: Path) -> None:
             result.confidence,
             result.reasoning,
             b.get("category", ""),
-            req,
         ])
 
         r = ws.max_row

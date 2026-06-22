@@ -11,7 +11,6 @@ from openpyxl.styles import PatternFill
 
 from classify import classify
 from ingest import extract_text, get_listing_id, load_listings
-from schema import requires_human_review
 
 load_dotenv()
 
@@ -31,16 +30,14 @@ CONFIDENCE_FILL = {
 def write_xlsx(pairs: list, path: Path) -> None:
     wb = Workbook()
     ws = wb.active
-    ws.append(["listing_id", "category", "confidence", "reasoning", "requires_human_review"])
+    ws.append(["listing_id", "category", "confidence", "reasoning"])
 
     for _, result in pairs:
-        review = requires_human_review(result.confidence)
         ws.append([
             result.listing_id,
             result.category,
             result.confidence,
             result.reasoning,
-            review,
         ])
         r = ws.max_row
         ws.cell(r, 2).fill = CATEGORY_FILL.get(result.category, PatternFill(fill_type=None))
@@ -53,7 +50,7 @@ def write_csv(pairs: list, path: Path) -> None:
     if not pairs:
         return
     original_keys = list(pairs[0][0].keys())
-    fieldnames = original_keys + ["classified_category", "confidence", "reasoning", "requires_human_review"]
+    fieldnames = original_keys + ["classified_category", "confidence", "reasoning"]
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -63,7 +60,6 @@ def write_csv(pairs: list, path: Path) -> None:
                 "classified_category": result.category,
                 "confidence": result.confidence,
                 "reasoning": result.reasoning,
-                "requires_human_review": requires_human_review(result.confidence),
             })
 
 

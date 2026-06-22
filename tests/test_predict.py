@@ -1,15 +1,4 @@
-from predict import requires_human_review, CATEGORY_FILL, CONFIDENCE_FILL
-
-
-class TestRequiresHumanReview:
-    def test_high_confidence_does_not_require_review(self):
-        assert requires_human_review("High") is False
-
-    def test_medium_confidence_requires_review(self):
-        assert requires_human_review("Medium") is True
-
-    def test_low_confidence_requires_review(self):
-        assert requires_human_review("Low") is True
+from predict import CATEGORY_FILL, CONFIDENCE_FILL
 
 
 class TestColorMaps:

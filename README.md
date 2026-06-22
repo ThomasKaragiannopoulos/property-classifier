@@ -26,7 +26,7 @@ Output: `results/predictions.csv` and `results/predictions.xlsx`
 py predict.py path/to/listings.csv
 py predict.py path/to/listings.csv --output path/to/output.xlsx
 ```
-Output: two files with the same stem — an Excel (colour-coded) and a CSV with the original listing columns plus `classified_category`, `confidence`, `reasoning`, and `requires_human_review` appended.
+Output: two files with the same stem — an Excel (colour-coded) and a CSV with the original listing columns plus `classified_category`, `confidence`, and `reasoning` appended.
 
 **Run tests:**
 ```bash
@@ -43,7 +43,6 @@ py -m pytest tests/ -v
 | `category` | `Nursery` / `SEN School` / `Food Store` / `None` |
 | `confidence` | `High` / `Medium` / `Low` |
 | `reasoning` | One sentence explaining the decision |
-| `requires_human_review` | `True` if confidence is Medium or Low |
 
 ---
 

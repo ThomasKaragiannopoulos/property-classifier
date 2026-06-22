@@ -27,11 +27,17 @@ for classification.
 5. If airspace or development rights above a property are being sold, classify what is being \
 sold, not the underlying tenant.
 
-Confidence:
-- High: current operation stated explicitly and unambiguously
-- Medium: ambiguous signals, former use with retained fit-out, "suitable for" language, \
-or thin listing text requiring some inference
-- Low: very little usable text, classification is heavy inference"""
+Confidence reflects whether the acquisitions team should take a second look, not just \
+how certain the category call is:
+- High: (a) property currently operates in a target sector, stated explicitly; OR \
+(b) property has absolutely no connection to any target sector — current use is clearly \
+unrelated (pub, industrial unit, woodland, retail shop selling non-food products, etc.)
+- Medium: property is classified None but has ANY of the following — former target-sector \
+use even if now vacant, retained sector-specific fit-out or planning consent (D1/F1/E), \
+"suitable for" or "ideal for" language of ANY kind (signals uncommitted current use), \
+development or airspace rights above a target-sector tenant, "marketed at [any] professionals" \
+language; flag for human review
+- Low: very little usable text, classification relies almost entirely on inference"""
 
 
 def classify(client: OpenAI, listing_id: str, listing_text: str) -> ClassificationResult:

@@ -2,9 +2,7 @@
 
 ## Assumptions
 
-I classified by sector relevance rather than current operational use. Harkalm's acquisition criteria explicitly include vacant and former properties for conversion, so a vacant former nursery with retained fit-out is `Nursery`, not `None`. The trade-off of a pure "current use" approach is that it treats a former Costcutter and a woodland plot identically — both `None` — when they have very different acquisition value. Sector relevance avoids that conflation while still rejecting generic suitability language (`"suitable for a variety of uses"`) that does not name a specific former sector use.
-
-Confidence is calibrated to reflect acquisition relevance, not classification certainty. A clearly vacant former nursery is `Nursery` / `Medium` — the category is unambiguous, but the absence of a current operator warrants a human check. A currently trading convenience store is `Food Store` / `High`. A woodland plot is `None` / `High`. The Medium trigger fires on any of: former or vacant use in a target sector, retained fit-out or planning consent (D1/F1/E), suitability language, or airspace above a target-sector tenant.
+I classified by sector relevance rather than current operational use — Harkalm explicitly acquires vacant and former properties for conversion, so a vacant former nursery is `Nursery` and a former Costcutter is `Food Store`. Generic suitability language without a named former sector use still returns `None`. Confidence reflects acquisition relevance: Medium fires on any of former/vacant use, retained fit-out or planning consent, suitability language, or airspace above a target-sector tenant; High means the call is unambiguous in either direction.
 
 ## Ambiguous Listings
 

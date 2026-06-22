@@ -26,7 +26,7 @@ Output: `results/predictions.csv` and `results/predictions.xlsx`
 py predict.py path/to/listings.csv
 py predict.py path/to/listings.csv --output path/to/output.xlsx
 ```
-Output: Excel with category, confidence, reasoning, and requires_human_review
+Output: two files with the same stem — an Excel (colour-coded) and a CSV with the original listing columns plus `classified_category`, `confidence`, `reasoning`, and `requires_human_review` appended.
 
 **Run tests:**
 ```bash

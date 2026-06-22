@@ -1,4 +1,5 @@
 import argparse
+import csv
 import os
 import sys
 from pathlib import Path
@@ -48,6 +49,24 @@ def write_xlsx(pairs: list, path: Path) -> None:
     wb.save(path)
 
 
+def write_csv(pairs: list, path: Path) -> None:
+    if not pairs:
+        return
+    original_keys = list(pairs[0][0].keys())
+    fieldnames = original_keys + ["classified_category", "confidence", "reasoning", "requires_human_review"]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row, result in pairs:
+            writer.writerow({
+                **row,
+                "classified_category": result.category,
+                "confidence": result.confidence,
+                "reasoning": result.reasoning,
+                "requires_human_review": requires_human_review(result.confidence),
+            })
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Classify unseen property listings.")
     parser.add_argument("input", type=Path, help="Path to input CSV")
@@ -75,8 +94,10 @@ def main() -> None:
         print(f"{result.category} ({result.confidence})")
         pairs.append((row, result))
 
+    csv_output = output.with_suffix(".csv")
     write_xlsx(pairs, output)
-    print(f"\nResults written to {output}")
+    write_csv(pairs, csv_output)
+    print(f"\nResults written to {output} and {csv_output}")
 
 
 if __name__ == "__main__":

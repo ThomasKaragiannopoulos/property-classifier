@@ -6,8 +6,8 @@ Prints a row-by-row match/mismatch table and a summary.
 import csv
 from pathlib import Path
 
-PREDICTIONS = Path("predictions.csv")
-BASELINE = Path("manual_baseline.csv")
+PREDICTIONS = Path("results/predictions.csv")
+BASELINE = Path("data/manual_baseline.csv")
 
 
 def load_keyed(path: Path, id_field: str, value_field: str) -> dict[str, str]:

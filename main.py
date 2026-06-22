@@ -5,16 +5,80 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill
 
 from classify import classify
 from ingest import extract_text, get_listing_id, load_listings
 
 load_dotenv()
 
-INPUT = Path("listings.csv")
-OUTPUT = Path("predictions.csv")
+INPUT = Path("data/listings.csv")
+BASELINE = Path("data/manual_baseline.csv")
+RESULTS_DIR = Path("results")
+OUTPUT_CSV = RESULTS_DIR / "predictions.csv"
+OUTPUT_XLSX = RESULTS_DIR / "predictions.xlsx"
 
-RESULT_FIELDS = ["classified_category", "confidence", "reasoning"]
+GREEN = PatternFill("solid", fgColor="C6EFCE")
+RED = PatternFill("solid", fgColor="FFC7CE")
+YELLOW = PatternFill("solid", fgColor="FFEB9C")
+
+
+def load_baseline(path: Path) -> dict:
+    with open(path, newline="", encoding="utf-8") as f:
+        return {row["listing_id"]: row for row in csv.DictReader(f)}
+
+
+def requires_human_review(confidence: str) -> bool:
+    return confidence in ("Medium", "Low")
+
+
+def write_csv(pairs: list, original_fields: list, path: Path) -> None:
+    fieldnames = original_fields + ["classified_category", "confidence", "reasoning"]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row, result in pairs:
+            out = dict(row)
+            out["classified_category"] = result.category
+            out["confidence"] = result.confidence
+            out["reasoning"] = result.reasoning
+            writer.writerow(out)
+
+
+def write_xlsx(pairs: list, baseline: dict, path: Path) -> None:
+    wb = Workbook()
+    ws = wb.active
+    ws.append([
+        "listing_id", "category", "confidence",
+        "reasoning", "manual_categorisation", "requires_human_review",
+    ])
+
+    for _, result in pairs:
+        b = baseline.get(result.listing_id, {})
+        req = requires_human_review(result.confidence)
+
+        ws.append([
+            result.listing_id,
+            result.category,
+            result.confidence,
+            result.reasoning,
+            b.get("category", ""),
+            req,
+        ])
+
+        r = ws.max_row
+
+        cat_match = result.category == b.get("category", "")
+        ws.cell(r, 2).fill = GREEN if cat_match else RED
+
+        conf_match = result.confidence == b.get("confidence", "")
+        ws.cell(r, 3).fill = GREEN if conf_match else YELLOW
+
+        manual_req = b.get("requires_human_review", "FALSE").upper() == "TRUE"
+        ws.cell(r, 6).fill = GREEN if req == manual_req else YELLOW
+
+    wb.save(path)
 
 
 def main() -> None:
@@ -25,9 +89,11 @@ def main() -> None:
 
     client = OpenAI(api_key=api_key)
     rows = load_listings(INPUT)
+    baseline = load_baseline(BASELINE)
+    RESULTS_DIR.mkdir(exist_ok=True)
     print(f"Loaded {len(rows)} listings.\n")
 
-    results = []
+    pairs = []
     for i, row in enumerate(rows):
         listing_id = get_listing_id(row, i)
         listing_text = extract_text(row)
@@ -36,21 +102,11 @@ def main() -> None:
         result = classify(client, listing_id, listing_text)
         print(f"{result.category} ({result.confidence})")
 
-        out_row = dict(row)
-        out_row["classified_category"] = result.category
-        out_row["confidence"] = result.confidence
-        out_row["reasoning"] = result.reasoning
-        results.append(out_row)
+        pairs.append((row, result))
 
-    original_fields = list(rows[0].keys())
-    fieldnames = original_fields + RESULT_FIELDS
-
-    with open(OUTPUT, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(results)
-
-    print(f"\nPredictions written to {OUTPUT}")
+    write_csv(pairs, list(rows[0].keys()), OUTPUT_CSV)
+    write_xlsx(pairs, baseline, OUTPUT_XLSX)
+    print(f"\nResults written to {OUTPUT_CSV} and {OUTPUT_XLSX}")
 
 
 if __name__ == "__main__":

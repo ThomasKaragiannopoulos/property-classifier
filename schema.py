@@ -1,0 +1,12 @@
+from typing import Literal
+from pydantic import BaseModel
+
+Category = Literal["Nursery", "SEN School", "Food Store", "None"]
+Confidence = Literal["High", "Medium", "Low"]
+
+
+class ClassificationResult(BaseModel):
+    listing_id: str
+    category: Category
+    confidence: Confidence
+    reasoning: str

@@ -2,7 +2,7 @@
 
 ## Assumptions
 
-Current operational use is the only signal that matters. A vacant former nursery is not a nursery target — it's a redevelopment opportunity. I treated "suitable for", "previously operated as", and similar phrases as disqualifying, and ignored points of interest entirely (nearby schools describe the neighbourhood, not the property). I also assumed confidence should reflect acquisition relevance, not just classification certainty — a vacant former nursery with retained fit-out gets Medium because it may still warrant a human look, even though the None call is unambiguous.
+I interpreted the four labels as current operational use. This is an explicit modelling choice, not a given — the brief doesn't specify whether a vacant former nursery with retained fit-out should be "Nursery" or "None." I took the conservative route: historic use and suitability language are disqualifying, and points of interest are ignored entirely (nearby schools describe the neighbourhood, not the property). The trade-off is that acquisition-relevant vacant assets are classified None rather than into a sector bucket — I preserved that signal via Medium confidence and a requires_human_review flag instead. In a production workflow I'd likely add a candidate_sector field to surface these without conflating them with currently operating properties. I also treated confidence as reflecting acquisition relevance rather than classification certainty — a vacant former nursery with retained fit-out gets Medium because it may still warrant a human look, even though the None call is unambiguous.
 
 ## Ambiguous Listings
 

@@ -49,6 +49,8 @@ py -m pytest tests/ -v
 
 The core rule is **current use only**. The model is explicitly instructed to ignore former use, potential use, and suitability language — these are the main sources of noise in agent copy.
 
+**Modelling choice:** I interpreted the four labels as *current operational use*. This deliberately avoids classifying properties based only on historic use or agent suitability language, which are the main sources of noise in agent copy. The trade-off is that a vacant former nursery with retained fit-out is classified `None`, not `Nursery` — acquisitions-relevant signal is preserved via `Medium` confidence and `requires_human_review = True` rather than the category label. In a production workflow I would likely add a separate `candidate_sector` field so vacant/former assets surface in sector-specific views without conflating them with currently operating properties.
+
 Rules applied in order:
 1. Vacancy signals (`"former"`, `"previously"`, `"vacant possession"`, `"lease expired"`) → `None`
 2. Suitability language (`"suitable for"`, `"ideal for"`, `"marketed at professionals"`) → `None` unless a named current tenant in the target sector is also stated

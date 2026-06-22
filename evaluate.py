@@ -10,6 +10,7 @@ from openpyxl.styles import PatternFill
 
 from classify import classify
 from ingest import extract_text, get_listing_id, load_listings
+from schema import requires_human_review
 
 load_dotenv()
 
@@ -28,9 +29,6 @@ def load_baseline(path: Path) -> dict:
     with open(path, newline="", encoding="utf-8") as f:
         return {row["listing_id"]: row for row in csv.DictReader(f)}
 
-
-def requires_human_review(confidence: str) -> bool:
-    return confidence in ("Medium", "Low")
 
 
 def write_csv(pairs: list, original_fields: list, path: Path) -> None:

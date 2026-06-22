@@ -17,3 +17,7 @@ class ClassificationResult(BaseModel):
     category: Category
     confidence: Confidence
     reasoning: str
+
+
+def requires_human_review(confidence: Confidence) -> bool:
+    return confidence in ("Medium", "Low")

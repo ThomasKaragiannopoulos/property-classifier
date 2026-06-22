@@ -10,6 +10,7 @@ from openpyxl.styles import PatternFill
 
 from classify import classify
 from ingest import extract_text, get_listing_id, load_listings
+from schema import requires_human_review
 
 load_dotenv()
 
@@ -24,9 +25,6 @@ CONFIDENCE_FILL = {
     "Medium": PatternFill("solid", fgColor="FFEB9C"), # yellow
     "Low": PatternFill("solid", fgColor="FFC7CE"),    # red
 }
-
-def requires_human_review(confidence: str) -> bool:
-    return confidence in ("Medium", "Low")
 
 
 def write_xlsx(pairs: list, path: Path) -> None:

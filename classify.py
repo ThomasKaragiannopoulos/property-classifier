@@ -1,4 +1,4 @@
-import json
+import sys
 
 from openai import OpenAI
 
@@ -54,8 +54,8 @@ def classify(client: OpenAI, listing_id: str, listing_text: str) -> Classificati
             parsed = response.choices[0].message.parsed
             if parsed is not None:
                 return ClassificationResult(listing_id=listing_id, **parsed.model_dump())
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}", file=sys.stderr)
 
     return ClassificationResult(
         listing_id=listing_id,

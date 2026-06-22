@@ -75,8 +75,6 @@ def write_xlsx(pairs: list, baseline: dict, path: Path) -> None:
         conf_match = result.confidence == b.get("confidence", "")
         ws.cell(r, 3).fill = GREEN if conf_match else YELLOW
 
-        manual_req = b.get("requires_human_review", "FALSE").upper() == "TRUE"
-        ws.cell(r, 6).fill = GREEN if req == manual_req else YELLOW
 
     wb.save(path)
 
